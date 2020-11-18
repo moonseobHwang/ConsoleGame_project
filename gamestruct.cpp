@@ -1,0 +1,2 @@
+#include "gamestruct.h"
+
