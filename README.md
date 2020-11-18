@@ -66,7 +66,7 @@
 * 바디정보
 * Score 정보
 <br><br><br>
-###mapFrame = 맵정보
+### mapFrame = 맵정보
 * 맵 정보
 
 <br><br><br><br>
