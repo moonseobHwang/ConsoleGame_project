@@ -22,7 +22,7 @@ enum Postion {x,y};
 struct EnemyInfo
 {
     int HP = 1;
-    int pos[2];
+    int pos[2][2];
     int id=0;
     char fig = 'W';
     char missile = '*';
