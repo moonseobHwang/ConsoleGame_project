@@ -15,7 +15,10 @@ int main()
     {
         mvaddstr(max_y - 1, COLS / 3, "                                                                                ");
         max_y = max_y - 3 ;
-        mvaddstr(max_y - 1, COLS / 3, "Title : JoJo's Bizarre Adventure ");
+        mvaddstr(max_y - 1, COLS / 3, "Title : JoJo's Bizarre Adventure");
+        // mvaddstr(max_y - 1, COLS / 3, "                                                                                ");
+        // max_y = max_y - 3 ;
+        mvaddstr(max_y - 1, COLS / 3, "AD, 2200, Cho, Hwang, and Son Three Kingdoms.");
         ch = getch();
     }
     endwin();
