@@ -14,13 +14,12 @@ void constrain(int *val,int max)
 void missiles(PlayerInfo *Player, EnemyInfo *Enemys,size_t size, int move)
 {
     for (int i =0;i<size;i++)
-    {        
-        
+    {                
         
         if((Enemys+i)->missile_pos[1]==0)
         {
-            (Enemys+i)->missile_pos[0] = (Enemys+i)->pos[0];
-            (Enemys+i)->missile_pos[1] = (Enemys+i)->pos[1];
+            (Enemys+i)->missile_pos[0] = (Enemys+i)->pos[0][0];
+            (Enemys+i)->missile_pos[1] = (Enemys+i)->pos[0][1];
         }
         else if((Enemys+i)->missile_pos[1] >= MAP_Y_MAX)
         {
@@ -65,8 +64,8 @@ void EnemyInit(EnemyInfo *Enemys,size_t size)
     for (int i =0 ; i<size; i++)
     {
         (Enemys+i)->id = i;
-        (Enemys+i)->pos[0] = int(MAP_X_MAX/2)-i;
-        (Enemys+i)->pos[1] = i+1;
+        (Enemys+i)->pos[0][0] = int(MAP_X_MAX/2)-i;
+        (Enemys+i)->pos[0][1] = i+1;
     }
 }
 
@@ -74,28 +73,32 @@ void EnemyMove(EnemyInfo *Enemys, size_t size, int move)
 {
     for (int i =0;i<size;i++)
     {
+        move = rand()%(move)+1;
         if (!(Enemys+i)->move_sign)
         {
-            move = rand()%(move+1);
+            
             (Enemys+i)->pos[0][0] = (Enemys+i)->pos[0][0]-move;
             constrain(&((Enemys+i)->pos[0][0]),MAP_X_MAX);
+            mvaddch((Enemys+i)->pos[1][1], (Enemys+i)->pos[1][0],E_TRACE); 
             mvaddch((Enemys+i)->pos[0][1], (Enemys+i)->pos[0][0] ,(Enemys+i)->fig );
-            mvaddch((Enemys+i)->pos[1][1], (Enemys+i)->pos[1][0]+move,E_TRACE);  
+             
 
             if((Enemys+i)->pos[0][0] - move < 1)
                 (Enemys+i)->move_sign = true;
         }           
         else if( (Enemys+i)->move_sign)
         {
-            (Enemys+i)->pos[0] = (Enemys+i)->pos[0]+move;
-            constrain(&(Enemys+i)->pos[0],MAP_X_MAX);
-            mvaddch((Enemys+i)->pos[1],(Enemys+i)->pos[0],(Enemys+i)->fig);
-            mvaddch((Enemys+i)->pos[1],(Enemys+i)->pos[0]-move,E_TRACE);
-            if((Enemys+i)->pos[0] == MAP_X_MAX)
+            
+            (Enemys+i)->pos[0][0] = (Enemys+i)->pos[0][0]+move;
+            constrain(&(Enemys+i)->pos[0][0],MAP_X_MAX);
+            mvaddch((Enemys+i)->pos[1][1],(Enemys+i)->pos[1][0],E_TRACE);
+            mvaddch((Enemys+i)->pos[0][1],(Enemys+i)->pos[0][0],(Enemys+i)->fig);
+            
+            if((Enemys+i)->pos[0][0] == MAP_X_MAX)
                 (Enemys+i)->move_sign = false;
         }
-        (Enemys+i)->pos[1][0] = (Enemys+i)->pos[0][];
-        (Enemys+i)->pos[1][1] = (Enemys+i)->pos[0][1];
+        (Enemys+i)->pos[1][0] = (Enemys+i)->pos[0][0];
+            (Enemys+i)->pos[1][1] = (Enemys+i)->pos[0][1];
     }
 }
 
@@ -160,7 +163,7 @@ int main()
     printw("%d, %d",LINES,COLS);
     // init finished
 
-    struct EnemyInfo Enemys[3];  
+    struct EnemyInfo Enemys[5];  
     struct PlayerInfo Player;
 
     EnemyInit(Enemys,sizeof(Enemys)/sizeof(EnemyInfo));
@@ -170,7 +173,7 @@ int main()
         command = getch();
         timeout(200);
         move(0,0);
-        missiles(&Player,Enemys,sizeof(Enemys)/sizeof(EnemyInfo),2);        
+        missiles(&Player,Enemys,sizeof(Enemys)/sizeof(EnemyInfo),1);        
         EnemyMove(Enemys,sizeof(Enemys)/sizeof(EnemyInfo),3);        
     }
 
