@@ -14,7 +14,7 @@ int main()
     while ((ch != 'q') && (ch != 'Q'))
     {
         mvaddstr(max_y - 1, COLS / 3, "                                 ");
-        max_y = max_y - 2 ;
+        max_y = max_y - 3 ;
         mvaddstr(max_y - 1, COLS / 3, "Title : JoJo's Bizarre Adventure ");
         ch = getch();
     }
