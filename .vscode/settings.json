@@ -1,6 +1,5 @@
 {
     "files.associations": {
-        "*.html": "html",
-        "unordered_map": "cpp"
+        "*.tcc": "cpp"
     }
 }

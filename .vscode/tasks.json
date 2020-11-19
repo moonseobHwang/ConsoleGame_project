@@ -3,19 +3,16 @@
         {
             "type": "cppbuild",
             "label": "C/C++: g++ build active file",
-            "command": "/usr/lib/ccache/g++",
+            "command": "/usr/bin/g++",
             "args": [
-
                 "-g",
-                "${file}",                
+                "${file}",
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}",
-                "-lncurses",
-                "-lm",
-                
+                "-lncurses"
             ],
             "options": {
-                "cwd": "/usr/lib/ccache"
+                "cwd": "/usr/bin"
             },
             "problemMatcher": [
                 "$gcc"

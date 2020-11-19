@@ -1,35 +1,53 @@
-#include "GameInfo.h"
 #include "stdio.h"
-//#include <curses.h>
-
-
+#include <curses.h>
+#include "GameInfo.h"
 
 using namespace std;
 
+void constrain(int *val,int max)
+{
+    if(*val<1) *val = 1;
+    else if(*val>max) *val = max;
+}
 
 // for check crash 
 void missiles(PlayerInfo *Player, EnemyInfo *Enemys,size_t size, int move)
 {
     for (int i =0;i<size;i++)
-    {
-        if (!(Enemys+i)->move_sign)
+    {        
+        
+        
+        if((Enemys+i)->missile_pos[1]==0)
         {
-            (Enemys+i)->pos[1] = (Enemys+i)->pos[1]-move;
-            constrain(&((Enemys+i)->pos[1]),MAP_Y_MAX);
-            mvaddch( (Enemys+i)->pos[0] , (Enemys+i)->pos[1] ,(Enemys+i)->missile);
-            mvaddch((Enemys+i)->pos[0],(Enemys+i)->pos[1]+move,E_TRACE);
-            if((Enemys+i)->pos[1] - move < 1)
-                (Enemys+i)->move_sign = true;
-        }           
-        else if( (Enemys+i)->move_sign)
-        {
-            (Enemys+i)->pos[1] = (Enemys+i)->pos[1]+move;
-            constrain(&(Enemys+i)->pos[1],MAP_Y_MAX);
-            mvaddch((Enemys+i)->pos[0],(Enemys+i)->pos[1],(Enemys+i)->missile);
-            mvaddch((Enemys+i)->pos[0],(Enemys+i)->pos[1]-move,E_TRACE);
-            if((Enemys+i)->pos[1] == MAP_Y_MAX)
-                (Enemys+i)->move_sign = false;
+            (Enemys+i)->missile_pos[0] = (Enemys+i)->pos[0];
+            (Enemys+i)->missile_pos[1] = (Enemys+i)->pos[1];
         }
+        else if((Enemys+i)->missile_pos[1] >= MAP_Y_MAX)
+        {
+            mvaddch(MAP_Y_MAX-1,(Enemys+i)->missile_pos[0],E_TRACE);
+            mvaddch(MAP_Y_MAX,(Enemys+i)->missile_pos[0],E_TRACE);
+            if(move>1)
+                mvaddch(MAP_Y_MAX-1,(Enemys+i)->missile_pos[0],E_TRACE);
+            else mvaddch(MAP_Y_MAX-1,(Enemys+i)->missile_pos[0]-1,E_TRACE);
+            (Enemys+i)->missile_pos[0] = 0;
+            (Enemys+i)->missile_pos[1] = 0;           
+        }
+        else
+        {
+            (Enemys+i)->missile_pos[y] = (Enemys+i)->missile_pos[y]+move;
+            constrain(&(Enemys+i)->missile_pos[y],MAP_Y_MAX);
+            mvaddch((Enemys+i)->missile_pos[y],(Enemys+i)->missile_pos[x],(Enemys+i)->missile);
+            mvaddch((Enemys+i)->missile_pos[y]+1,(Enemys+i)->missile_pos[x],E_TRACE);
+            if((Enemys+i)->missile_pos[y]-move > MAP_Y_MAX)
+                
+                mvaddch(MAP_Y_MAX-1,(Enemys+i)->missile_pos[0],E_TRACE);
+            else 
+                mvaddch((Enemys+i)->missile_pos[y]-move,(Enemys+i)->missile_pos[x],E_TRACE);
+            
+        }
+            
+            
+            
     }
 }
 
@@ -40,11 +58,7 @@ int is_move_ok(int y,int x)
     return !((comp_ch == 'O'));
 }
 
-void constrain(int *val,int max)
-{
-    if(*val<1) *val = 1;
-    else if(*val>max) *val = max;
-}
+
 
 void EnemyInit(EnemyInfo *Enemys,size_t size)
 {
@@ -52,7 +66,7 @@ void EnemyInit(EnemyInfo *Enemys,size_t size)
     {
         (Enemys+i)->id = i;
         (Enemys+i)->pos[0] = int(MAP_X_MAX/2)-i;
-        (Enemys+i)->pos[1] = i*2+1;
+        (Enemys+i)->pos[1] = i+1;
     }
 }
 
@@ -62,10 +76,11 @@ void EnemyMove(EnemyInfo *Enemys, size_t size, int move)
     {
         if (!(Enemys+i)->move_sign)
         {
+            move = rand()%(move+1);
             (Enemys+i)->pos[0] = (Enemys+i)->pos[0]-move;
             constrain(&((Enemys+i)->pos[0]),MAP_X_MAX);
-            mvaddch( (Enemys+i)->pos[1] , (Enemys+i)->pos[0] ,(Enemys+i)->fig );
-            mvaddch((Enemys+i)->pos[1],(Enemys+i)->pos[0]+move,E_TRACE);
+            mvaddch((Enemys+i)->pos[1], (Enemys+i)->pos[0] ,(Enemys+i)->fig );
+            mvaddch((Enemys+i)->pos[1], (Enemys+i)->pos[0]+move,E_TRACE);
             if((Enemys+i)->pos[0] - move < 1)
                 (Enemys+i)->move_sign = true;
         }           
@@ -146,13 +161,14 @@ int main()
     struct PlayerInfo Player;
 
     EnemyInit(Enemys,sizeof(Enemys)/sizeof(EnemyInfo));
-
+    
     while(command != 'q' && command !='Q')
     {
         command = getch();
         timeout(200);
-        move(0,0);        
-        EnemyMove(Enemys,sizeof(Enemys)/sizeof(EnemyInfo),2);        
+        move(0,0);
+        missiles(&Player,Enemys,sizeof(Enemys)/sizeof(EnemyInfo),2);        
+        EnemyMove(Enemys,sizeof(Enemys)/sizeof(EnemyInfo),3);        
     }
 
     endwin(); //자원 반납으로 종료시킴
