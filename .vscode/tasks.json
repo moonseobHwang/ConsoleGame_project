@@ -7,6 +7,8 @@
             "args": [
                 "-g",
                 "${file}",
+                "-l",
+                "curses",
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}"
             ],
