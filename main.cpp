@@ -53,19 +53,17 @@ using namespace std;
 #define OPPONENT 'O' 
 #define E_TRACE ' '
 
-void delay(clock_t n)
-{
+// int missile(){
+//     vector<char> missile;
+//     missile.push_back('*');
+// }
 
-  clock_t start = clock();
-
-  while(clock() - start < n);
-
-}
 int main() {
     WINDOW *w;
     w = initscr();
     curs_set(0);
     keypad(stdscr, TRUE); timeout(30); // control game speed
+    vector<const char> missile;
     int count = 0,y = LINES-1, x = COLS-COLS, move_x = 0, move_y = 0; // start main
     int ch = 'y'; // define integer for compare with define
     while ((ch != 'q') && (ch != 'Q')) {
@@ -73,6 +71,7 @@ int main() {
         // mvaddch(11, 5, OPPONENT);
         if(count >= 0 && count <= 15){ 
             count += 1;
+            if(count%2 == 0 && count <= 15){missile.push_back('*');}
             mvaddch(move_y, ++move_x, OPPONENT);
             mvaddch(move_y, move_x - 1, E_TRACE);
             mvaddch(y, x, PLAYER); 
@@ -80,6 +79,7 @@ int main() {
             ch = getch();
         }else if(count >= 16 && count <= 31){
             count += 1;
+            if(count%2 == 0 && count <= 31){missile.push_back('*');}
             mvaddch(move_y, --move_x, OPPONENT);
             mvaddch(move_y, move_x + 1, E_TRACE);
             mvaddch(y, x, PLAYER); 
@@ -87,6 +87,8 @@ int main() {
             ch = getch();
             if(count == 32){count = 0;}
         }
+        if(move_y <= 20){mvaddch(++move_y,move_x,PLAYER); move_y = 0;}
+           
         switch (ch) {
             case KEY_UP:
             case 'w': y = y - 1; break;
