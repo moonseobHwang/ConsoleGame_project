@@ -10,10 +10,6 @@
             "request": "launch",
             "program": "${fileDirname}/${fileBasenameNoExtension}",
             "args": [],
-            "includePath": [
-                "/usr/include/curses.h",
-                "${default}"
-            ],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
