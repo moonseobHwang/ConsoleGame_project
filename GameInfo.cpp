@@ -41,12 +41,8 @@ void missiles(PlayerInfo *Player, EnemyInfo *Enemys,size_t size, int move)
                 
                 mvaddch(MAP_Y_MAX-1,(Enemys+i)->missile_pos[x],E_TRACE);
             else 
-                mvaddch((Enemys+i)->missile_pos[y]-move,(Enemys+i)->missile_pos[x],E_TRACE);
-            
-        }
-            
-            
-            
+                mvaddch((Enemys+i)->missile_pos[y]-move,(Enemys+i)->missile_pos[x],E_TRACE);    
+        }   
     }
 }
 
@@ -54,7 +50,7 @@ int is_move_ok(int y,int x)
 {
     int comp_ch;
     comp_ch = mvinch(y,x);
-    return !((comp_ch == 'O'));
+    return !((comp_ch == 'O')||(comp_ch == '*')||(comp_ch == '$'));
 }
 
 
@@ -102,47 +98,48 @@ void EnemyMove(EnemyInfo *Enemys, size_t size, int move)
     }
 }
 
-void command_move(int command,int *x,int *y)
+bool calc_damage(PlayerInfo *Player)
 {
+    int comp_ch='y';
+    comp_ch = mvinch(Player->position[y],Player->position[x]);
+    switch(comp_ch)
+    {
+        case '*' :
+            Player->HP -=1;
+            if(Player->HP == 0) return 0;
+            break;
+        case '$' :
+            Player->HP +=1;
+            constrain(&Player->HP,10);
+            break;
+    }
+}
+void command_move(int command,PlayerInfo *Player)
+{
+    
     switch (command)
     {
         case  KEY_LEFT:     
-            if(is_move_ok(*y,*x-1) && *x != 1)
+            if(is_move_ok(Player->position[y],Player->position[x]-1) && Player->position[x] != 1)
             {
-                *x -=1;
-                constrain(x,100);            
-                mvaddch(*y,*x,PLAYER);
-                mvaddch(*y,*x+1,E_TRACE);  
-            }
-                
+                Player->position[x] -=1;                
+                //constrain(&Player->position[x] ,100);            
+                mvaddch(Player->position[y],Player->position[x],Player->fig);
+                mvaddch(Player->position[y],Player->position[x]+1,E_TRACE);  
+            }                
             break;
         case  KEY_RIGHT:
-         if( is_move_ok(*y,*x+1))
+         if( is_move_ok(Player->position[y],Player->position[x]+1))
             {    
-                *x +=1; 
-                constrain(x,100);
-                mvaddch(*y,*x,PLAYER);
-                mvaddch(*y,*x-1,E_TRACE);  
+                Player->position[x] +=1; 
+                //constrain(&Player->position[x],100);
+                mvaddch(Player->position[y],Player->position[x],Player->fig);
+                mvaddch(Player->position[y],Player->position[x]-1,E_TRACE);  
             }
             break;
-        case  KEY_UP: 
-            if( is_move_ok(*y-1,*x))
-            {      
-                *y -=1; 
-                constrain(y,MAX_Y);
-                mvaddch(*y,*x,PLAYER);
-                mvaddch(*y+1,*x,E_TRACE);  
-            }
+        case  'a': 
+        case  'A':   
             break;
-        case  KEY_DOWN: 
-            if( is_move_ok(*y+1,*x))
-            {    
-                *y +=1; 
-                constrain(y,MAX_Y);
-                mvaddch(*y,*x,PLAYER);
-                mvaddch(*y-1,*x,E_TRACE);  
-            }
-            break;    
     }
 
 }
@@ -154,6 +151,7 @@ int main()
     WINDOW *w;
     w=initscr();
     curs_set(0);        //visible cursor
+    noecho();
     //'start main
     keypad(stdscr, TRUE);
     timeout(30); //fps 를 30으로 한정 
@@ -170,9 +168,13 @@ int main()
     
     while(command != 'q' && command !='Q')
     {
-        command = getch();
         timeout(200);
-        move(0,0);
+        move(19,2);
+        printw("HP : %d ",Player.HP);
+        command = getch();
+        calc_damage(&Player);
+        if(Player.HP <=0 ){clear(); move(MAP_Y_MAX/2,MAP_X_MAX/2); printw("GAME OVER"); while(getch()!='q'); break;}
+        command_move(command,&Player);        
         missiles(&Player,Enemys,sizeof(Enemys)/sizeof(EnemyInfo),1);        
         EnemyMove(Enemys,sizeof(Enemys)/sizeof(EnemyInfo),3);        
     }

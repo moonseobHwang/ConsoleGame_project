@@ -35,7 +35,7 @@ struct EnemyInfo
 struct PlayerInfo
 {
     int HP = 10;
-    int position[2]={0};
+    int position[2]={0,MAP_Y_MAX-1};
     int id=0;
     char fig = 'M';
     char missile[3] = {'*','^','A'};
