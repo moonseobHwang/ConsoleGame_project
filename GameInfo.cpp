@@ -40,7 +40,7 @@ void EnemyMove(EnemyInfo *Enemys, size_t size, int move)
             (Enemys+i)->position[0] = (Enemys+i)->position[0]-move;
             constrain(&((Enemys+i)->position[0]),MAP_X_MAX);
             mvaddch( (Enemys+i)->position[1] , (Enemys+i)->position[0] ,(Enemys+i)->fig );
-            mvaddch((Enemys+i)->position[1],(Enemys+i)->position[0]+move,E_TRACE);
+            mvaddch( (Enemys+i)->position[1] , (Enemys+i)->position[0]+move,E_TRACE);
             if((Enemys+i)->position[0] - move < 1)
                 (Enemys+i)->move_sign = true;
         }           
