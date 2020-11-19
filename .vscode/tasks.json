@@ -5,9 +5,9 @@
             "label": "C/C++: g++ build active file",
             "command": "/usr/lib/ccache/g++",
             "args": [
-                
+
                 "-g",
-                "${file}",
+                "${file}",                
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}",
                 "-lncurses",

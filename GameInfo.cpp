@@ -8,6 +8,31 @@ using namespace std;
 
 
 // for check crash 
+void missiles(PlayerInfo *Player, EnemyInfo *Enemys,size_t size, int move)
+{
+    for (int i =0;i<size;i++)
+    {
+        if (!(Enemys+i)->move_sign)
+        {
+            (Enemys+i)->pos[1] = (Enemys+i)->pos[1]-move;
+            constrain(&((Enemys+i)->pos[1]),MAP_Y_MAX);
+            mvaddch( (Enemys+i)->pos[0] , (Enemys+i)->pos[1] ,(Enemys+i)->missile);
+            mvaddch((Enemys+i)->pos[0],(Enemys+i)->pos[1]+move,E_TRACE);
+            if((Enemys+i)->pos[1] - move < 1)
+                (Enemys+i)->move_sign = true;
+        }           
+        else if( (Enemys+i)->move_sign)
+        {
+            (Enemys+i)->pos[1] = (Enemys+i)->pos[1]+move;
+            constrain(&(Enemys+i)->pos[1],MAP_Y_MAX);
+            mvaddch((Enemys+i)->pos[0],(Enemys+i)->pos[1],(Enemys+i)->missile);
+            mvaddch((Enemys+i)->pos[0],(Enemys+i)->pos[1]-move,E_TRACE);
+            if((Enemys+i)->pos[1] == MAP_Y_MAX)
+                (Enemys+i)->move_sign = false;
+        }
+    }
+}
+
 int is_move_ok(int y,int x)
 {
     int comp_ch;
@@ -26,8 +51,8 @@ void EnemyInit(EnemyInfo *Enemys,size_t size)
     for (int i =0 ; i<size; i++)
     {
         (Enemys+i)->id = i;
-        (Enemys+i)->position[0] = int(MAP_X_MAX/2)-i;
-        (Enemys+i)->position[1] = i*2+1;
+        (Enemys+i)->pos[0] = int(MAP_X_MAX/2)-i;
+        (Enemys+i)->pos[1] = i*2+1;
     }
 }
 
@@ -37,20 +62,20 @@ void EnemyMove(EnemyInfo *Enemys, size_t size, int move)
     {
         if (!(Enemys+i)->move_sign)
         {
-            (Enemys+i)->position[0] = (Enemys+i)->position[0]-move;
-            constrain(&((Enemys+i)->position[0]),MAP_X_MAX);
-            mvaddch( (Enemys+i)->position[1] , (Enemys+i)->position[0] ,(Enemys+i)->fig );
-            mvaddch((Enemys+i)->position[1],(Enemys+i)->position[0]+move,E_TRACE);
-            if((Enemys+i)->position[0] - move < 1)
+            (Enemys+i)->pos[0] = (Enemys+i)->pos[0]-move;
+            constrain(&((Enemys+i)->pos[0]),MAP_X_MAX);
+            mvaddch( (Enemys+i)->pos[1] , (Enemys+i)->pos[0] ,(Enemys+i)->fig );
+            mvaddch((Enemys+i)->pos[1],(Enemys+i)->pos[0]+move,E_TRACE);
+            if((Enemys+i)->pos[0] - move < 1)
                 (Enemys+i)->move_sign = true;
         }           
         else if( (Enemys+i)->move_sign)
         {
-            (Enemys+i)->position[0] = (Enemys+i)->position[0]+move;
-            constrain(&(Enemys+i)->position[0],MAP_X_MAX);
-            mvaddch((Enemys+i)->position[1],(Enemys+i)->position[0],(Enemys+i)->fig);
-            mvaddch((Enemys+i)->position[1],(Enemys+i)->position[0]-move,E_TRACE);
-            if((Enemys+i)->position[0] == MAP_X_MAX)
+            (Enemys+i)->pos[0] = (Enemys+i)->pos[0]+move;
+            constrain(&(Enemys+i)->pos[0],MAP_X_MAX);
+            mvaddch((Enemys+i)->pos[1],(Enemys+i)->pos[0],(Enemys+i)->fig);
+            mvaddch((Enemys+i)->pos[1],(Enemys+i)->pos[0]-move,E_TRACE);
+            if((Enemys+i)->pos[0] == MAP_X_MAX)
                 (Enemys+i)->move_sign = false;
         }
     }
