@@ -5,11 +5,14 @@
             "label": "C/C++: g++ build active file",
             "command": "/usr/lib/ccache/g++",
             "args": [
+                
                 "-g",
                 "${file}",
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}",
-                "-lncurses","-lm"
+                "-lncurses",
+                "-lm",
+                
             ],
             "options": {
                 "cwd": "/usr/lib/ccache"

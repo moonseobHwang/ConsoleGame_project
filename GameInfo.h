@@ -1,7 +1,12 @@
 #pragma once
 
 #include <curses.h>
-#define MAP_X_MAX 15
+#include <vector>
+#include <cmath>
+#include <time.h>
+#include <string>
+
+#define MAP_X_MAX 50
 #define MAP_Y_MAX 20
 #define MIN 1
 #define MAX_X COLS-COLS
@@ -21,6 +26,7 @@ struct EnemyInfo
     int id=0;
     char fig = 'W';
     char missile = '*';
+    bool move_sign = false;
 
 };    
 

@@ -1,21 +1,13 @@
 #include "GameInfo.h"
 #include "stdio.h"
 //#include <curses.h>
-#include <vector>
-#include <cmath>
-#include <time.h>
+
 
 
 using namespace std;
-void delay(clock_t n)
-{
 
-  clock_t start = clock();
 
-  while(clock() - start < n);
-
-}
-
+// for check crash 
 int is_move_ok(int y,int x)
 {
     int comp_ch;
@@ -29,29 +21,84 @@ void constrain(int *val,int max)
     else if(*val>max) *val = max;
 }
 
-void EnemyInit(EnemyInfo Enemy[],size_t size)
+void EnemyInit(EnemyInfo *Enemys,size_t size)
 {
     for (int i =0 ; i<size; i++)
     {
-        *(&Enemy[i].id) = i;
-        *(&Enemy[i].position[0]) = 7-i;
-        *(&Enemy[i].position[1]) = i*2;
-        
-
+        (Enemys+i)->id = i;
+        (Enemys+i)->position[0] = int(MAP_X_MAX/2)-i;
+        (Enemys+i)->position[1] = i*2+1;
     }
 }
 
-void EnemyMove(EnemyInfo Enemy[],size_t size, int move)
+void EnemyMove(EnemyInfo *Enemys, size_t size, int move)
 {
     for (int i =0;i<size;i++)
     {
-        if(Enemy[i].position[0]-move>2) *(&Enemy[i].position[0]) = Enemy[i].position[0]-move;
-        else *(&Enemy[i].position[0])=Enemy[i].position[0]+move;
-        constrain(&Enemy[i].position[0],MAX_X);
-       // printf("Enemy %d : %d, %d\n",i,Enemy[i].position[0],Enemy[i].position[1]);
-        mvaddch(Enemy[i].position[1],Enemy[i].position[0],Enemy[i].fig);
-
+        if (!(Enemys+i)->move_sign)
+        {
+            (Enemys+i)->position[0] = (Enemys+i)->position[0]-move;
+            constrain(&((Enemys+i)->position[0]),MAP_X_MAX);
+            mvaddch( (Enemys+i)->position[1] , (Enemys+i)->position[0] ,(Enemys+i)->fig );
+            mvaddch((Enemys+i)->position[1],(Enemys+i)->position[0]+move,E_TRACE);
+            if((Enemys+i)->position[0] - move < 1)
+                (Enemys+i)->move_sign = true;
+        }           
+        else if( (Enemys+i)->move_sign)
+        {
+            (Enemys+i)->position[0] = (Enemys+i)->position[0]+move;
+            constrain(&(Enemys+i)->position[0],MAP_X_MAX);
+            mvaddch((Enemys+i)->position[1],(Enemys+i)->position[0],(Enemys+i)->fig);
+            mvaddch((Enemys+i)->position[1],(Enemys+i)->position[0]-move,E_TRACE);
+            if((Enemys+i)->position[0] == MAP_X_MAX)
+                (Enemys+i)->move_sign = false;
+        }
     }
+}
+
+void command_move(int command,int *x,int *y)
+{
+    switch (command)
+    {
+        case  KEY_LEFT:     
+            if(is_move_ok(*y,*x-1) && *x != 1)
+            {
+                *x -=1;
+                constrain(x,100);            
+                mvaddch(*y,*x,PLAYER);
+                mvaddch(*y,*x+1,E_TRACE);  
+            }
+                
+            break;
+        case  KEY_RIGHT:
+         if( is_move_ok(*y,*x+1))
+            {    
+                *x +=1; 
+                constrain(x,100);
+                mvaddch(*y,*x,PLAYER);
+                mvaddch(*y,*x-1,E_TRACE);  
+            }
+            break;
+        case  KEY_UP: 
+            if( is_move_ok(*y-1,*x))
+            {      
+                *y -=1; 
+                constrain(y,MAX_Y);
+                mvaddch(*y,*x,PLAYER);
+                mvaddch(*y+1,*x,E_TRACE);  
+            }
+            break;
+        case  KEY_DOWN: 
+            if( is_move_ok(*y+1,*x))
+            {    
+                *y +=1; 
+                constrain(y,MAX_Y);
+                mvaddch(*y,*x,PLAYER);
+                mvaddch(*y-1,*x,E_TRACE);  
+            }
+            break;    
+    }
+
 }
 
 
@@ -70,17 +117,17 @@ int main()
     printw("%d, %d",LINES,COLS);
     // init finished
 
-    EnemyInfo Enemys[4];
-    PlayerInfo Player;
+    struct EnemyInfo Enemys[3];  
+    struct PlayerInfo Player;
+
     EnemyInit(Enemys,sizeof(Enemys)/sizeof(EnemyInfo));
-    while(command != 'q' || command !='Q')
+
+    while(command != 'q' && command !='Q')
     {
         command = getch();
-        delay(500);
-        move(0,0);
-        
-        EnemyMove(Enemys,sizeof(Enemys)/sizeof(EnemyInfo),1);
-        
+        timeout(200);
+        move(0,0);        
+        EnemyMove(Enemys,sizeof(Enemys)/sizeof(EnemyInfo),2);        
     }
 
     endwin(); //자원 반납으로 종료시킴
