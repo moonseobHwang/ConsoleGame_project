@@ -1,3 +1,5 @@
+#define MAP_X_MAX 15
+#define MAP_Y_MAX 20
 
 enum Postion {x,y};     
 
