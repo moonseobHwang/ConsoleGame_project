@@ -38,7 +38,9 @@ struct PlayerInfo
     int position[2]={0,MAP_Y_MAX-1};
     int id=0;
     char fig = 'M';
-    char missile[3] = {'*','^','A'};
+    const char missile[3] = {'|','^','A'};
+    int missile_pos[2] = {0,0};
+    bool mis_on = false;
     int score=0;
 };
 

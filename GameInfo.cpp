@@ -9,47 +9,47 @@ void constrain(int *val,int max)
     else if(*val>max) *val = max;
 }
 
-// 미사일 크래싱 체크 코드.
-void missiles(PlayerInfo *Player, EnemyInfo *Enemys,size_t size, int move)
+// 미사일 움직임 코드.
+void EnemyMissiles(EnemyInfo *Enemys,size_t size, int move)
 {
     for (int i =0;i<size;i++)
     {                
-        
-        if((Enemys+i)->missile_pos[1]==0)
+        if((Enemys+i)->missile_pos[1]==0 && (Enemys+i)->HP > 0)
         {
             (Enemys+i)->missile_pos[0] = (Enemys+i)->pos[0][0];
             (Enemys+i)->missile_pos[1] = (Enemys+i)->pos[0][1];
         }
-        else if((Enemys+i)->missile_pos[1] >= MAP_Y_MAX)
+        else if((Enemys+i)->missile_pos[1] >= MAP_Y_MAX )
         {
             mvaddch(MAP_Y_MAX-1,(Enemys+i)->missile_pos[0],E_TRACE);
             mvaddch(MAP_Y_MAX,(Enemys+i)->missile_pos[0],E_TRACE);
             if(move>1)
                 mvaddch(MAP_Y_MAX-1,(Enemys+i)->missile_pos[0],E_TRACE);
-            else mvaddch(MAP_Y_MAX-1,(Enemys+i)->missile_pos[0]-1,E_TRACE);
+            else 
+                mvaddch(MAP_Y_MAX-1,(Enemys+i)->missile_pos[0]-1,E_TRACE);
             (Enemys+i)->missile_pos[0] = 0;
             (Enemys+i)->missile_pos[1] = 0;           
         }
-        else
+        else 
         {
             (Enemys+i)->missile_pos[y] = (Enemys+i)->missile_pos[y]+move;
             constrain(&(Enemys+i)->missile_pos[y],MAP_Y_MAX);
             mvaddch((Enemys+i)->missile_pos[y],(Enemys+i)->missile_pos[x],(Enemys+i)->missile);
             mvaddch((Enemys+i)->missile_pos[y]+1,(Enemys+i)->missile_pos[x],E_TRACE);
-            if((Enemys+i)->missile_pos[y]-move > MAP_Y_MAX)
-                
+            if((Enemys+i)->missile_pos[y]-move > MAP_Y_MAX)                
                 mvaddch(MAP_Y_MAX-1,(Enemys+i)->missile_pos[x],E_TRACE);
             else 
                 mvaddch((Enemys+i)->missile_pos[y]-move,(Enemys+i)->missile_pos[x],E_TRACE);    
         }   
     }
 }
+
 // 객체 이동가능여부 확인
 int is_move_ok(int y,int x)
 {
     int comp_ch;
     comp_ch = mvinch(y,x);
-    return !((comp_ch == 'O')||(comp_ch == '*')||(comp_ch == '$'));
+    return !((comp_ch == 'O')||(comp_ch == '*')||(comp_ch == '$')||(comp_ch == 'W')||(comp_ch == 'M'));
 }
 // 적 객체 초기위치 설정
 void EnemyInit(EnemyInfo *Enemys,size_t size)
@@ -67,34 +67,37 @@ void EnemyMove(EnemyInfo *Enemys, size_t size, int move)
     for (int i =0;i<size;i++)
     {
         move = rand()%(move)+1;
-        if (!(Enemys+i)->move_sign)
+        if ((Enemys+i)->HP >0)
         {
-            
-            (Enemys+i)->pos[0][0] = (Enemys+i)->pos[0][0]-move;
-            constrain(&((Enemys+i)->pos[0][0]),MAP_X_MAX);
-            mvaddch((Enemys+i)->pos[1][1], (Enemys+i)->pos[1][0],E_TRACE); 
-            mvaddch((Enemys+i)->pos[0][1], (Enemys+i)->pos[0][0] ,(Enemys+i)->fig );
-             
+            if (!(Enemys+i)->move_sign)
+            {
+                
+                (Enemys+i)->pos[0][0] = (Enemys+i)->pos[0][0]-move;
+                constrain(&((Enemys+i)->pos[0][0]),MAP_X_MAX);
+                mvaddch((Enemys+i)->pos[1][1], (Enemys+i)->pos[1][0],E_TRACE); 
+                mvaddch((Enemys+i)->pos[0][1], (Enemys+i)->pos[0][0] ,(Enemys+i)->fig );
+                
 
-            if((Enemys+i)->pos[0][0] - move < 1)
-                (Enemys+i)->move_sign = true;
-        }           
-        else if( (Enemys+i)->move_sign)
-        {
-            
-            (Enemys+i)->pos[0][0] = (Enemys+i)->pos[0][0]+move;
-            constrain(&(Enemys+i)->pos[0][0],MAP_X_MAX);
-            mvaddch((Enemys+i)->pos[1][1],(Enemys+i)->pos[1][0],E_TRACE);
-            mvaddch((Enemys+i)->pos[0][1],(Enemys+i)->pos[0][0],(Enemys+i)->fig);
-            
-            if((Enemys+i)->pos[0][0] == MAP_X_MAX)
-                (Enemys+i)->move_sign = false;
-        }
-        (Enemys+i)->pos[1][0] = (Enemys+i)->pos[0][0];
+                if((Enemys+i)->pos[0][0] - move < 1)
+                    (Enemys+i)->move_sign = true;
+            }           
+            else if( (Enemys+i)->move_sign)
+            {
+                
+                (Enemys+i)->pos[0][0] = (Enemys+i)->pos[0][0]+move;
+                constrain(&(Enemys+i)->pos[0][0],MAP_X_MAX);
+                mvaddch((Enemys+i)->pos[1][1],(Enemys+i)->pos[1][0],E_TRACE);
+                mvaddch((Enemys+i)->pos[0][1],(Enemys+i)->pos[0][0],(Enemys+i)->fig);
+                
+                if((Enemys+i)->pos[0][0] == MAP_X_MAX)
+                    (Enemys+i)->move_sign = false;
+            }
+            (Enemys+i)->pos[1][0] = (Enemys+i)->pos[0][0];
             (Enemys+i)->pos[1][1] = (Enemys+i)->pos[0][1];
+        }
     }
 }
-//
+// 데미지 및 점수 계산
 bool calc_damage(PlayerInfo *Player)
 {
     int comp_ch='y';
@@ -111,10 +114,10 @@ bool calc_damage(PlayerInfo *Player)
             break;
     }
 }
-//
+
+// 플레이어 커맨드 처리
 void command_move(int command,PlayerInfo *Player)
 {
-    
     switch (command)
     {
         case  KEY_LEFT:     
@@ -136,10 +139,62 @@ void command_move(int command,PlayerInfo *Player)
             }
             break;
         case  'a': 
-        case  'A':   
+        case  'A':
+            if (Player->mis_on == false)
+            {
+                Player->mis_on = true;
+                Player->missile_pos[x] = Player->position[x];
+                Player->missile_pos[y] = Player->position[y]-1;
+                mvaddch(Player->missile_pos[y],Player->missile_pos[x],Player->missile[0]);
+            }            
             break;
     }
 
+}
+
+void PlayerMissile(PlayerInfo *Player,EnemyInfo *Enemys, size_t size)
+{
+    if(Player->mis_on == true && Player->missile_pos[y]>(Enemys+(size-1))->pos[0][y])
+    {
+        mvaddch(Player->missile_pos[y],Player->missile_pos[x],E_TRACE);
+        Player->missile_pos[y] -=1;
+        mvaddch(Player->missile_pos[y],Player->missile_pos[x],Player->missile[0]);
+    }
+    else
+    {
+        if(Player->mis_on == true)
+        {
+            bool check_move = false;
+            for(int i =0; i<size;i++)
+            {   // && !(mvinch(Player->missile_pos[y],Player->missile_pos[x])=='W')
+                check_move = is_move_ok(Player->missile_pos[y]-1,Player->missile_pos[x]);
+                if(!check_move)
+                {
+                    Player->mis_on = false;
+                    mvaddch(Player->missile_pos[y],Player->missile_pos[x],E_TRACE);
+                    mvaddch(Player->missile_pos[y]-1,Player->missile_pos[x],E_TRACE);
+                    Player->missile_pos[x] = 0; Player->missile_pos[y] = 0;
+                    
+                    (Enemys+i)->HP = 0;
+                }
+                else if(Player->missile_pos[y]>0)
+                {
+                    mvaddch(Player->missile_pos[y],Player->missile_pos[x],E_TRACE);
+                    Player->missile_pos[y] +=1;
+                    mvaddch(Player->missile_pos[y],Player->missile_pos[x],Player->missile[0]);
+                }
+                else if(Player->missile_pos[y]<=0)
+                {
+                    Player->mis_on = false;
+                    Player->missile_pos[x]=0; Player->missile_pos[y]=0; 
+
+                }              
+                
+            }
+        }
+
+        
+    }
 }
 
 void gameSet()
@@ -157,7 +212,7 @@ void gameinit()
 {
     curs_set(0);        //visible cursor
     noecho();
-    nodelay(stdscr,0);
+    //halfdelay(100);
     keypad(stdscr, TRUE);
     timeout(30); //fps 를 30으로 한정 
 }
@@ -188,13 +243,15 @@ int main()
     {
         timeout(200);
         move(19,2);
-        printw("HP : %d ",Player.HP);
+        printw("HP : %d",Player.HP);    
         command = getch();
         calc_damage(&Player);        
         if(Player.HP <=0 ) {gameSet(); break;};               
-        missiles(&Player,Enemys,sizeof(Enemys)/sizeof(EnemyInfo),1);        
+        EnemyMissiles(Enemys,sizeof(Enemys)/sizeof(EnemyInfo),1);        
         EnemyMove(Enemys,sizeof(Enemys)/sizeof(EnemyInfo),3);
-        command_move(command,&Player); 
+        command_move(command,&Player);
+        PlayerMissile(&Player,Enemys,sizeof(Enemys)/sizeof(EnemyInfo));
+     
     }
 
     //game end 
