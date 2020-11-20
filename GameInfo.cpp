@@ -45,7 +45,7 @@ void EnemyMissiles(EnemyInfo *Enemys,size_t size, int move)
 }
 
 // 객체 이동가능여부 확인
-int is_move_ok(int y,int x)
+bool is_move_ok(int y,int x)
 {
     int comp_ch;
     comp_ch = mvinch(y,x);
@@ -98,21 +98,18 @@ void EnemyMove(EnemyInfo *Enemys, size_t size, int move)
     }
 }
 // 데미지 및 점수 계산
-bool calc_damage(PlayerInfo *Player)
+void calc_damage(PlayerInfo *Player,EnemyInfo *Enemys,size_t size)
 {
-    int comp_ch='y';
-    comp_ch = mvinch(Player->position[y]+1,Player->position[x]);
-    switch(comp_ch)
-    {
-        case '*' :
+    bool hit=false;
+    int player_pos[2] = {Player->position[x],Player->position[y]};    
+    for (int i=0;i<size;i++)
+    {   
+        if( (Enemys+i)->missile_pos[x]==player_pos[0] && (Enemys+i)->missile_pos[y]==player_pos[1] )
+        {
             Player->HP -=1;
-            if(Player->HP == 0) return 0;
-            break;
-        case '$' :
-            Player->HP +=1;
-            constrain(&Player->HP,10);
-            break;
+        }
     }
+
 }
 
 // 플레이어 커맨드 처리
@@ -154,7 +151,9 @@ void command_move(int command,PlayerInfo *Player)
 
 void PlayerMissile(PlayerInfo *Player,EnemyInfo *Enemys, size_t size)
 {
-    if(Player->mis_on == true && Player->missile_pos[y]>(Enemys+(size-1))->pos[0][y])
+    static int i = 0;
+    mvaddch(MAP_Y_MAX,MAP_X_MAX,char(i));
+    if(Player->mis_on == true && Player->missile_pos[y]>(Enemys+(size-1))->pos[0][y]+1)
     {
         mvaddch(Player->missile_pos[y],Player->missile_pos[x],E_TRACE);
         Player->missile_pos[y] -=1;
@@ -165,32 +164,38 @@ void PlayerMissile(PlayerInfo *Player,EnemyInfo *Enemys, size_t size)
         if(Player->mis_on == true)
         {
             bool check_move = false;
-            for(int i =0; i<size;i++)
-            {   // && !(mvinch(Player->missile_pos[y],Player->missile_pos[x])=='W')
-                check_move = is_move_ok(Player->missile_pos[y]-1,Player->missile_pos[x]);
-                if(!check_move)
-                {
-                    Player->mis_on = false;
-                    mvaddch(Player->missile_pos[y],Player->missile_pos[x],E_TRACE);
-                    mvaddch(Player->missile_pos[y]-1,Player->missile_pos[x],E_TRACE);
-                    Player->missile_pos[x] = 0; Player->missile_pos[y] = 0;
-                    
-                    (Enemys+i)->HP = 0;
-                }
-                else if(Player->missile_pos[y]>0)
-                {
-                    mvaddch(Player->missile_pos[y],Player->missile_pos[x],E_TRACE);
-                    Player->missile_pos[y] +=1;
-                    mvaddch(Player->missile_pos[y],Player->missile_pos[x],Player->missile[0]);
-                }
-                else if(Player->missile_pos[y]<=0)
-                {
-                    Player->mis_on = false;
-                    Player->missile_pos[x]=0; Player->missile_pos[y]=0; 
-
-                }              
-                
+            
+            // && !(mvinch(Player->missile_pos[y],Player->missile_pos[x])=='W')
+            check_move |= (Player->missile_pos[y]-1==(Enemys+(size-1)-i)->pos[0][y] && Player->missile_pos[x]-1==(Enemys+(size-1)-i)->pos[0][x]);
+            check_move |= (Player->missile_pos[y]-1==(Enemys+(size-1)-i)->pos[0][y] && Player->missile_pos[x]==(Enemys+(size-1)-i)->pos[0][x]);
+            check_move |= (Player->missile_pos[y]-1==(Enemys+(size-1)-i)->pos[0][y] && Player->missile_pos[x]+1==(Enemys+(size-1)-i)->pos[0][x]);
+            if(check_move)
+            {
+                Player->mis_on = false;
+                mvaddch(Player->missile_pos[y],Player->missile_pos[x],E_TRACE);
+                mvaddch((Enemys+(size-1)-i)->pos[0][y],(Enemys+(size-1)-i)->pos[0][x],E_TRACE);
+                mvaddch((Enemys+(size-1)-i)->pos[0][y],(Enemys+(size-1)-i)->pos[0][x],E_TRACE);
+                Player->missile_pos[x] = 0; Player->missile_pos[y] = 0;                    
+                (Enemys+(size-i-1))->HP = 0;
             }
+            else if(Player->missile_pos[y]>1)
+            {
+                mvaddch(Player->missile_pos[y],Player->missile_pos[x],E_TRACE);                    
+                mvaddch(Player->missile_pos[y]-1,Player->missile_pos[x],Player->missile[0]);
+                Player->missile_pos[y] = Player->missile_pos[y]-1;
+            }
+            else if(Player->missile_pos[y]<=1)
+            {
+                Player->mis_on = false;
+                mvaddch(Player->missile_pos[y],Player->missile_pos[x],E_TRACE);
+                Player->missile_pos[x]=0; Player->missile_pos[y]=0; 
+
+            }
+            if(Player->mis_on==true && Player->missile_pos[y] < size && Player->missile_pos[y] > 1)    
+                i++;
+            if(i>size) i = 0;   
+                
+            
         }
 
         
@@ -212,7 +217,7 @@ void gameinit()
 {
     curs_set(0);        //visible cursor
     noecho();
-    //halfdelay(100);
+    nodelay(stdscr,1);
     keypad(stdscr, TRUE);
     timeout(30); //fps 를 30으로 한정 
 }
@@ -233,24 +238,29 @@ int main()
 
     struct EnemyInfo Enemys[5];  
     struct PlayerInfo Player;
-
-    EnemyInit(Enemys,sizeof(Enemys)/sizeof(EnemyInfo));
+    size_t size = sizeof(Enemys)/sizeof(EnemyInfo);
+    EnemyInit(Enemys,size);
     
     // game start
 
     // game Play
+    int count = 0;
     while(command != 'q' && command !='Q')
     {
+        
         timeout(200);
         move(19,2);
         printw("HP : %d",Player.HP);    
         command = getch();
-        calc_damage(&Player);        
+        calc_damage(&Player,Enemys,size);        
         if(Player.HP <=0 ) {gameSet(); break;};               
-        EnemyMissiles(Enemys,sizeof(Enemys)/sizeof(EnemyInfo),1);        
-        EnemyMove(Enemys,sizeof(Enemys)/sizeof(EnemyInfo),3);
+        EnemyMissiles(Enemys,size,1);  
+        PlayerMissile(&Player,Enemys,size);  
+        if(count > 4)    
+            EnemyMove(Enemys,size,1);        
         command_move(command,&Player);
-        PlayerMissile(&Player,Enemys,sizeof(Enemys)/sizeof(EnemyInfo));
+        count++;
+        refresh();
      
     }
 

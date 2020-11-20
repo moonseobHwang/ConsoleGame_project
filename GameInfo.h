@@ -7,7 +7,7 @@
 #include <string>
 
 #define MAP_X_MAX 25
-#define MAP_Y_MAX 16
+#define MAP_Y_MAX 10
 #define MIN 1
 #define MAX_X COLS-COLS
 #define MAX_Y  15
