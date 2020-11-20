@@ -1,0 +1,16 @@
+CC=gcc
+CFLAGS=-lncurses -lm
+TARGET=GAME.out
+OBJS=GameInfo.o game.o
+ 
+$(TARGET): $(OBJS)
+    $(CC) -o $@ $(OBJS)
+
+GameInfo.o : GameInfo.c
+    $(CC) -c -o GameInfo.o GameInfo.c
+
+game.o : game.c
+    $(CC) -c -o game.o game.c
+
+clean:
+    rm $(OBJECT) $(TARGET)
