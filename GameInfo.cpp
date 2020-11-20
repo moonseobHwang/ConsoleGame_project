@@ -98,7 +98,7 @@ void EnemyMove(EnemyInfo *Enemys, size_t size, int move)
 bool calc_damage(PlayerInfo *Player)
 {
     int comp_ch='y';
-    comp_ch = mvinch(Player->position[y],Player->position[x]);
+    comp_ch = mvinch(Player->position[y]+1,Player->position[x]);
     switch(comp_ch)
     {
         case '*' :
@@ -121,7 +121,7 @@ void command_move(int command,PlayerInfo *Player)
             if(is_move_ok(Player->position[y],Player->position[x]-1) && Player->position[x] != 1)
             {
                 Player->position[x] -=1;                
-                //constrain(&Player->position[x] ,100);            
+                constrain(&Player->position[x] ,MAP_X_MAX);            
                 mvaddch(Player->position[y],Player->position[x],Player->fig);
                 mvaddch(Player->position[y],Player->position[x]+1,E_TRACE);  
             }                
@@ -130,7 +130,7 @@ void command_move(int command,PlayerInfo *Player)
          if( is_move_ok(Player->position[y],Player->position[x]+1))
             {    
                 Player->position[x] +=1; 
-                //constrain(&Player->position[x],100);
+                constrain(&Player->position[x],MAP_X_MAX);
                 mvaddch(Player->position[y],Player->position[x],Player->fig);
                 mvaddch(Player->position[y],Player->position[x]-1,E_TRACE);  
             }
@@ -147,19 +147,29 @@ void gameSet()
     clear(); 
     move(MAP_Y_MAX/2,MAP_X_MAX/2); 
     printw("GAME OVER"); 
+    move(MAP_Y_MAX/2+1,MAP_X_MAX/2-6); 
+    printw("Press Q for quit Game"); 
     while(getch()!='q'); 
     endwin();
 }
+
+void gameinit()
+{
+    curs_set(0);        //visible cursor
+    noecho();
+    nodelay(stdscr,0);
+    keypad(stdscr, TRUE);
+    timeout(30); //fps 를 30으로 한정 
+}
+
 int main()
 {
     // init curses option
     WINDOW *w;
     w=initscr();
-    curs_set(0);        //visible cursor
-    noecho();
+    gameinit();
     //'start main
-    keypad(stdscr, TRUE);
-    timeout(30); //fps 를 30으로 한정 
+    
     int max_y = LINES-1, max_x =COLS-COLS; // LINES = 가로행 갯수. COLS = 세로열 갯수 둘다 자동으로 할당됨
     int command = 'y';
     int move_x=0, move_y=0;
@@ -170,30 +180,24 @@ int main()
     struct PlayerInfo Player;
 
     EnemyInit(Enemys,sizeof(Enemys)/sizeof(EnemyInfo));
-
-    int *mis_pos[3] = new int[3]();
-    for (int i=0; i> MAP_X_MAX; i++)
-    {
-        *mis_pos[i][0] =  0; 
-        *mis_pos[i][1] =  MAP_X_MAX; 
-        *mis_pos[i][2] =  0; 
-    }
     
+    // game start
+
+    // game Play
     while(command != 'q' && command !='Q')
     {
         timeout(200);
         move(19,2);
         printw("HP : %d ",Player.HP);
         command = getch();
-        calc_damage(&Player);
-        
-        if(Player.HP <=0 ) gameSet();
-        command_move(command,&Player);        
+        calc_damage(&Player);        
+        if(Player.HP <=0 ) {gameSet(); break;};               
         missiles(&Player,Enemys,sizeof(Enemys)/sizeof(EnemyInfo),1);        
-        EnemyMove(Enemys,sizeof(Enemys)/sizeof(EnemyInfo),3);        
+        EnemyMove(Enemys,sizeof(Enemys)/sizeof(EnemyInfo),3);
+        command_move(command,&Player); 
     }
 
-
+    //game end 
 
     endwin(); //자원 반납으로 종료시킴
     return 0;
