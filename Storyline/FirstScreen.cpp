@@ -28,7 +28,7 @@ int output_start(int nX, int nY)
         nX1 = COLS / 2 - strlen(strtext_start[i].c_str()) / 2; // x를 절반으로 나누고 글자수를 세서 출력
         move(nY1 + i, 0);                                // 위로 한칸
         clrtoeol();                                      // 커서의 처음부터 끝까지 지우기
-        mvprintw(nY1 + i, nX1, strtext_start[i].c_str());      // 출력
+        mvaddstr(nY1 + i, nX1, strtext_start[i].c_str());      // 출력
     }
     move(nY + i, 0); // 마지막 문장 이후로 지워야해서
     clrtoeol();
