@@ -5,7 +5,16 @@ using namespace std;
 int main()
 {
     int row, column;
-    char char_row = '|', char_column = '-';
+    char char_row = '-', char_column = '|';
+
+    // 입력 시작
+    cout << "Enter Row and Column: ";
+    cin >> row >> column;
+    cout << "Display Row : ";
+    cin >> char_row;
+    cout << "Display Column : ";
+    cin >> char_column;
+    // 입력 끝
 
     // 행 생성
     char **map = new char *[row]; // Dynamic Allocation
@@ -26,15 +35,19 @@ int main()
         for (int j = 0; j < column; j++)
         {
             if( j == 0)
-                map[i][j] = char_row;
+                map[i][j] = char_column;
             else if( j == column - 1)
-                map[i][j] = char_row;
-            else if( column / 2 == j)
                 map[i][j] = char_column;
             else
-                map[i][j] = ' ';            
+                map[i][j] = ' ';
         }
     } // end for
+
+    // 새로운 행 추가하기
+    for (int i = 0; i < 25; i++)
+    {
+        map[17][i] = char_row;
+    }
 
     // 마지막 행
     for (int i = 0; i < column; i++)
