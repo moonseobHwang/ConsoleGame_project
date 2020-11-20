@@ -20,16 +20,20 @@ string strtext[] ={ "Title : JoJo's Bizarre Adventure",blank,blank,
 void output(int nX, int nY)
 {
     int i = 0;
+    static int nX1 = nX;
+    static int nY1 = nY;
+
     for (i = 0; i < 28; i++)                        // 10문장이라
     {
-        nX = COLS / 2 - strlen(strtext[i].c_str()) / 2;         // x를 절반으로 나누고 글자수를 세서 출력
-        move(nY+i, 0);                                          // 위로 한칸
+        nX1 = COLS / 2 - strlen(strtext[i].c_str()) / 2;         // x를 절반으로 나누고 글자수를 세서 출력
+        move(nY1+i, 0);                                          // 위로 한칸
         clrtoeol();                                             // 커서의 처음부터 끝까지 지우기
-        mvprintw(nY+i, nX, strtext[i].c_str());                 // 출력
+        mvprintw(nY1+i, nX1, strtext[i].c_str());                 // 출력
         
     }
     move(nY+i, 0);                                                  // 마지막 문장 이후로 지워야해서
     clrtoeol();
+    nY1 = nY1 - 1;
 };
 
 int main()
@@ -48,8 +52,7 @@ int main()
     printw("PRESS 'S' TO START THE GAME");
     while ((ch != 's') && (ch != 'S'))
     {
-        output(nX, nY);
-        nY = nY - 1;
+        output(nX, nY);        
         ch = getch();
     }
     endwin();
