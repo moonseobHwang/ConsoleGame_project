@@ -1,5 +1,4 @@
 #include "stdio.h"
-#include <curses.h>
 #include "GameInfo.h"
 
 using namespace std;
@@ -52,8 +51,6 @@ int is_move_ok(int y,int x)
     comp_ch = mvinch(y,x);
     return !((comp_ch == 'O')||(comp_ch == '*')||(comp_ch == '$'));
 }
-
-
 
 void EnemyInit(EnemyInfo *Enemys,size_t size)
 {
@@ -144,7 +141,14 @@ void command_move(int command,PlayerInfo *Player)
 
 }
 
-
+void gameSet()
+{
+    clear(); 
+    move(MAP_Y_MAX/2,MAP_X_MAX/2); 
+    printw("GAME OVER"); 
+    while(getch()!='q'); 
+    endwin();
+}
 int main()
 {
     // init curses option
@@ -165,6 +169,14 @@ int main()
     struct PlayerInfo Player;
 
     EnemyInit(Enemys,sizeof(Enemys)/sizeof(EnemyInfo));
+
+    int *mis_pos[3] = new int[3]();
+    for (int i=0; i> MAP_X_MAX; i++)
+    {
+        *mis_pos[i][0] =  0; 
+        *mis_pos[i][1] =  MAP_X_MAX; 
+        *mis_pos[i][2] =  0; 
+    }
     
     while(command != 'q' && command !='Q')
     {
@@ -173,11 +185,14 @@ int main()
         printw("HP : %d ",Player.HP);
         command = getch();
         calc_damage(&Player);
-        if(Player.HP <=0 ){clear(); move(MAP_Y_MAX/2,MAP_X_MAX/2); printw("GAME OVER"); while(getch()!='q'); break;}
+        
+        if(Player.HP <=0 ) gameSet();
         command_move(command,&Player);        
         missiles(&Player,Enemys,sizeof(Enemys)/sizeof(EnemyInfo),1);        
         EnemyMove(Enemys,sizeof(Enemys)/sizeof(EnemyInfo),3);        
     }
+
+
 
     endwin(); //자원 반납으로 종료시킴
     return 0;
