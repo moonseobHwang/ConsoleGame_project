@@ -9,7 +9,7 @@ void constrain(int *val,int max)
     else if(*val>max) *val = max;
 }
 
-// for check crash 
+// 미사일 크래싱 체크 코드.
 void missiles(PlayerInfo *Player, EnemyInfo *Enemys,size_t size, int move)
 {
     for (int i =0;i<size;i++)
@@ -44,14 +44,14 @@ void missiles(PlayerInfo *Player, EnemyInfo *Enemys,size_t size, int move)
         }   
     }
 }
-
+// 객체 이동가능여부 확인
 int is_move_ok(int y,int x)
 {
     int comp_ch;
     comp_ch = mvinch(y,x);
     return !((comp_ch == 'O')||(comp_ch == '*')||(comp_ch == '$'));
 }
-
+// 적 객체 초기위치 설정
 void EnemyInit(EnemyInfo *Enemys,size_t size)
 {
     for (int i =0 ; i<size; i++)
@@ -61,7 +61,7 @@ void EnemyInit(EnemyInfo *Enemys,size_t size)
         (Enemys+i)->pos[0][1] = i+1;
     }
 }
-
+// 적 움직임 자동 관리
 void EnemyMove(EnemyInfo *Enemys, size_t size, int move)
 {
     for (int i =0;i<size;i++)
@@ -94,7 +94,7 @@ void EnemyMove(EnemyInfo *Enemys, size_t size, int move)
             (Enemys+i)->pos[1][1] = (Enemys+i)->pos[0][1];
     }
 }
-
+//
 bool calc_damage(PlayerInfo *Player)
 {
     int comp_ch='y';
@@ -111,6 +111,7 @@ bool calc_damage(PlayerInfo *Player)
             break;
     }
 }
+//
 void command_move(int command,PlayerInfo *Player)
 {
     
