@@ -1,10 +1,12 @@
-#pragma once
+#ifndef GAMEINFO_H
+#define GAMEINFO_H
 
-#include <curses.h>
+#include <stdio.h>
 #include <vector>
 #include <cmath>
 #include <time.h>
 #include <string>
+#include <curses.h>
 
 #define MAP_X_MAX 25
 #define MAP_Y_MAX 10
@@ -56,3 +58,16 @@ struct MapInfo
 {
     char fig[2] = {'_','|'};
 };
+
+void constrain(int *val,int max);
+void EnemyMissiles(EnemyInfo *Enemys,size_t size, int move);
+bool is_move_ok(int y,int x);
+void EnemyInit(EnemyInfo *Enemys,size_t size);
+void EnemyMove(EnemyInfo *Enemys, size_t size, int move);
+void calc_damage(PlayerInfo *Player,EnemyInfo *Enemys,size_t size);
+void command_move(int command,PlayerInfo *Player);
+void PlayerMissile(PlayerInfo *Player,EnemyInfo *Enemys, size_t size);
+void gameSet();
+void gameinit();
+
+#endif
