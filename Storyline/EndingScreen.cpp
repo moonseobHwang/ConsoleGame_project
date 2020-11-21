@@ -5,15 +5,16 @@
 
 using namespace std;
 
-const string blank2 = "                                                                                        ";
-string strtext_ending[] = {"Finally, Mr. Jo killed Park, Hwang, and Son.", blank2, blank2,
-                           "Mr.Jo learned all C++ and achieved national unification.", blank2, blank2,
-                           "To stabilize the country, Mr.Jo should go to the KDC drone center", blank2, blank2,
-                           "And he has to get a drone piloting certificate...", blank2, blank2,
-                           "However, the KDC director's evil conspiracy was hidden...", blank2, blank2,
-                           "Indeed, Will Mr.Jo be able to conquer the KDC?", blank2, blank2,
-                           "Will Mr.Jo be able to learn drones???", blank2, blank2
-
+const string blank = "                                                                                        ";
+string strtext_ending[] = {"Finally, Mr. Jo killed Park, Hwang, and Son.", blank, blank,
+                           "Mr.Jo learned all C++ and achieved national unification.", blank, blank,
+                           "To stabilize the country, Mr.Jo should go to the KDC drone center", blank, blank,
+                           "And he has to get a drone piloting certificate...", blank, blank,
+                           "However, the KDC director's evil conspiracy was hidden...", blank, blank,
+                           "Indeed, Will Mr.Jo be able to conquer the KDC?", blank, blank,
+                           "Will Mr.Jo be able to learn drones???", blank, blank,
+                           "Continued from Part 2...", blank, blank,
+                           "to be continued..."
                            };
 
 int output_ending(int nX, int nY)
@@ -22,19 +23,17 @@ int output_ending(int nX, int nY)
     static int nX1 = nX;
     static int nY1 = nY;
 
-    for (i = 0; i < 21; i++) // 문장의개수
+    for (i = 0; i < 25; i++) // 문장의개수
     {
         nX = COLS / 2 - strlen(strtext_ending[i].c_str()) / 2; // x를 절반으로 나누고 글자수를 세서 출력
-        move(nY + i, 0);                                       // 위로 한칸
+        move(nY1 + i, 0);                                       // 위로 한칸
         clrtoeol();                                            // 커서의 처음부터 끝까지 지우기
-        mvaddstr(nY + i, nX1, strtext_ending[i].c_str());       // 출력
+        mvaddstr(nY + i, nX1, strtext_ending[i].c_str());      // 출력
     }
     move(nY + i, 0); // 마지막 문장 이후로 지워야해서
     clrtoeol();
     nY1 = nY1 - 1;
-    printf("%d",nY1);
-    return nY1;
-};
+}
 
 void print_ending(int nX, int nY, char q)
 {
