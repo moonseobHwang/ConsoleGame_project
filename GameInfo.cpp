@@ -50,6 +50,7 @@ bool is_move_ok(int y,int x)
     comp_ch = mvinch(y,x);
     return !((comp_ch == 'O')||(comp_ch == '*')||(comp_ch == '$')||(comp_ch == 'W')||(comp_ch == 'M'));
 }
+
 // 적 객체 초기위치 설정
 void EnemyInit(EnemyInfo *Enemys,size_t size)
 {
@@ -60,6 +61,7 @@ void EnemyInit(EnemyInfo *Enemys,size_t size)
         (Enemys+i)->pos[0][1] = i+1;
     }
 }
+
 // 적 움직임 자동 관리
 void EnemyMove(EnemyInfo *Enemys, size_t size, int move)
 {
@@ -96,6 +98,7 @@ void EnemyMove(EnemyInfo *Enemys, size_t size, int move)
         }
     }
 }
+
 // 데미지 및 점수 계산
 void calc_damage(PlayerInfo *Player,EnemyInfo *Enemys,size_t size)
 {
@@ -148,6 +151,7 @@ void command_move(int command,PlayerInfo *Player)
 
 }
 
+//플레이어 미사일 위치 이동
 void PlayerMissile(PlayerInfo *Player,EnemyInfo *Enemys, size_t size)
 {
     static int i = 0;
@@ -201,6 +205,7 @@ void PlayerMissile(PlayerInfo *Player,EnemyInfo *Enemys, size_t size)
     }    
 }
 
+// 게임 종료
 void gameSet()
 {
     clear(); 
@@ -212,6 +217,7 @@ void gameSet()
     endwin();
 }
 
+// 게임 초기설정 함수 
 void gameinit()
 {
     curs_set(0);        //visible cursor
@@ -219,12 +225,12 @@ void gameinit()
     nodelay(stdscr,1);
     keypad(stdscr, TRUE);
     timeout(30); //fps 를 30으로 한정 
-    for (int i=0;i==MAP_X_MAX;i++)
-    {
-        for(int j=0;j==MAP_Y_MAX,j++)
-        {
-            
-        }
-    }
+    // for (int i=0;i==MAP_X_MAX;i++)
+    // {
+    //     for(int j=0;j==MAP_Y_MAX,j++)
+    //     {
+
+    //     }
+    // }
 }
 

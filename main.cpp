@@ -28,16 +28,25 @@ int main()
     while(command != 'q' && command !='Q')
     {        
         timeout(200);
-        // 
+        // 플레이어 체력 표기줄로 이동 및 표기
         move(Player.position[y]+3,2);
-        printw("HP : %d",Player.HP);    
+        printw("HP : %d",Player.HP);  
+        // 플레이어 키보드 입력 확인
         command = getch();
-        calc_damage(&Player,Enemys,size);        
-        if(Player.HP <=0) {gameSet(); break;};               
-        EnemyMissiles(Enemys,size,1);  
+
+        //화면상에 나와있는 표기들로 부터 데미지 계산
+        calc_damage(&Player,Enemys,size);     
+        //만약 체력이 0 이라면 게임을 종료    
+        if(Player.HP <=0) {gameSet(); break;};
+         
+        //                      
         PlayerMissile(&Player,Enemys,size);  
-        if(count > 4)    
-            EnemyMove(Enemys,size,1);        
+        if(count > 2){
+            EnemyMissiles(Enemys,size,1);  
+            EnemyMove(Enemys,size,1);     
+            count = 0;
+        }    
+               
         command_move(command,&Player);
         count++;
         refresh();
