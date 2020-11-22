@@ -64,25 +64,26 @@ void EnemyInit(EnemyInfo *Enemys,size_t size)
 
 // 적 움직임 자동 관리
 void EnemyMove(EnemyInfo *Enemys, size_t size, int move)
-{
-    for (int i =0;i<size;i++)
+{    
+    for (int i =0;i<size;i++)   // 적 갯수만큼 for문 실행하는 코드
     {
-        move = rand()%(move)+1;
+        move = rand()%(move)+1; // 2를 넣었다면 2만큼 만 움직일 수 있음
         if ((Enemys+i)->HP >0)
         {
-            if (!(Enemys+i)->move_sign)
+            if (!(Enemys+i)->move_sign) // 적 아이콘 왼쪽 움직임
             {
-                
+                // 적 위치 이동 포인트 계산
                 (Enemys+i)->pos[0][0] = (Enemys+i)->pos[0][0]-move;
+                // 적 이동 최대,최소값 제한 
                 constrain(&((Enemys+i)->pos[0][0]),MAP_X_MAX);
+                // 적 아이콘 위치 이동 
                 mvaddch((Enemys+i)->pos[1][1], (Enemys+i)->pos[1][0],E_TRACE); 
                 mvaddch((Enemys+i)->pos[0][1], (Enemys+i)->pos[0][0] ,(Enemys+i)->fig );
-                
-
+                // 최소값보다 작은 위치로 이동할 경우 반대방향으로 이동 
                 if((Enemys+i)->pos[0][0] - move < 1)
                     (Enemys+i)->move_sign = true;
             }           
-            else if( (Enemys+i)->move_sign)
+            else if( (Enemys+i)->move_sign) // 적 아이콘이 오른쪽으로 움직임
             {
                 
                 (Enemys+i)->pos[0][0] = (Enemys+i)->pos[0][0]+move;
@@ -93,6 +94,7 @@ void EnemyMove(EnemyInfo *Enemys, size_t size, int move)
                 if((Enemys+i)->pos[0][0] == MAP_X_MAX)
                     (Enemys+i)->move_sign = false;
             }
+            // 현재 위치의 x,y 좌표를 기존 위치 좌표로 업데이트 
             (Enemys+i)->pos[1][0] = (Enemys+i)->pos[0][0];
             (Enemys+i)->pos[1][1] = (Enemys+i)->pos[0][1];
         }
@@ -169,9 +171,7 @@ void PlayerMissile(PlayerInfo *Player,EnemyInfo *Enemys, size_t size)
             bool check_move = false;
             
             // && !(mvinch(Player->missile_pos[y],Player->missile_pos[x])=='W')
-            check_move |= (Player->missile_pos[y]-1==(Enemys+(size-1)-i)->pos[0][y] && Player->missile_pos[x]-1==(Enemys+(size-1)-i)->pos[0][x]);
             check_move |= (Player->missile_pos[y]-1==(Enemys+(size-1)-i)->pos[0][y] && Player->missile_pos[x]==(Enemys+(size-1)-i)->pos[0][x]);
-            check_move |= (Player->missile_pos[y]-1==(Enemys+(size-1)-i)->pos[0][y] && Player->missile_pos[x]+1==(Enemys+(size-1)-i)->pos[0][x]);
             if(check_move)
             {
                 Player->mis_on = false;
@@ -203,14 +203,44 @@ void PlayerMissile(PlayerInfo *Player,EnemyInfo *Enemys, size_t size)
         i++;
         if( i>= size)  i = 0;
     }    
+
 }
 
-// 게임 종료
+bool checkEnemyHp(EnemyInfo *Enemys,size_t size)
+{
+    int EnemysHP = 0;
+    for(int i=0; i<size; i++)
+    {
+        if((Enemys+i)->HP == 0){
+            EnemysHP += 1;
+        }
+    }
+    if(EnemysHP >= size)
+    {
+        return true;
+    }
+    return false;
+}
+
+
+// 게임 패배 종료
 void gameSet()
 {
     clear(); 
     move(MAP_Y_MAX/2,MAP_X_MAX/2); 
     printw("GAME OVER"); 
+    move(MAP_Y_MAX/2+1,MAP_X_MAX/2-6); 
+    printw("Press Q for quit Game"); 
+    while(getch()!='q'); 
+    endwin();
+}
+
+// 게임 승리 종료
+void gameWin()
+{
+    clear(); 
+    move(MAP_Y_MAX/2,MAP_X_MAX/2); 
+    printw("GAME Win!!"); 
     move(MAP_Y_MAX/2+1,MAP_X_MAX/2-6); 
     printw("Press Q for quit Game"); 
     while(getch()!='q'); 
