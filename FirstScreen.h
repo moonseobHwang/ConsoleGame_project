@@ -10,5 +10,5 @@
 
 int output_start(int nX, int nY);
 void print_start(int nX, int nY, char s);
-void game_start(int x, int y,int *diff);
+void game_start(int *diff);
 #endif

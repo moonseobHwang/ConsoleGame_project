@@ -4,7 +4,7 @@ using namespace std;
 
 void constrain(int *val,int max)
 {
-    if(*val<1) *val = 1;
+    if(*val<MIN) *val = MIN;
     else if(*val>max) *val = max;
 }
 
@@ -80,7 +80,7 @@ void EnemyMove(EnemyInfo *Enemys, size_t size, int move)
                 mvaddch((Enemys+i)->pos[1][1], (Enemys+i)->pos[1][0],E_TRACE); 
                 mvaddch((Enemys+i)->pos[0][1], (Enemys+i)->pos[0][0] ,(Enemys+i)->fig );
                 // 최소값보다 작은 위치로 이동할 경우 반대방향으로 이동 
-                if((Enemys+i)->pos[0][0] - move < 1)
+                if((Enemys+i)->pos[0][0] - move < MIN)
                     (Enemys+i)->move_sign = true;
             }           
             else if( (Enemys+i)->move_sign) // 적 아이콘이 오른쪽으로 움직임

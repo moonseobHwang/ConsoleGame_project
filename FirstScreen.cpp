@@ -54,15 +54,16 @@ void print_start(int nX, int nY, char s)
     }
 }
 
-void game_start(int x, int y,int *diff)
+void game_start(int *diff)
 {
-    print_start(0,LINES-1,'s');
-    move(y/2,x/2);
+    print_start(0,LINES-1,'s');    
+    move(MAP_Y_MAX/2,MAP_X_MAX/2);
+    refresh();
     printf(" 난이도를 입력후 엔터를 눌러주세요 1 ~ 5");
     scanf("%d",diff);
     *diff +=2;
     constrain(diff,7);
-    move(0,0);
+    move(1,0);
     clear();
     refresh();
 

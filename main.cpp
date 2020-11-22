@@ -18,7 +18,7 @@ int main()
         //'start main
 
         // game start
-        game_start(0,MAP_Y_MAX,&diff);    
+        game_start(&diff);    
         struct PlayerInfo Player;    
         struct EnemyInfo Enemys[diff];       
         size_t size = sizeof(Enemys)/sizeof(EnemyInfo);
@@ -53,10 +53,10 @@ int main()
         }
         // delete &Player;
         // delete[] Enemys;
-        clear();
-        refresh();
+        clear();       
         move(MAP_Y_MAX/2,MAP_X_MAX/2); 
-        printf("재도전? press q or Q with enter");
+        refresh();
+        printf("재도전? press S with start or Q with quit");
         char c = 's';
         scanf("%s",&c);
         if(c == 'q' || c == 'Q') break;

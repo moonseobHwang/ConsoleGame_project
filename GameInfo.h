@@ -10,9 +10,9 @@
 #include <curses.h>
 
 
-#define MAP_X_MAX 25
+#define MAP_X_MAX 27
 #define MAP_Y_MAX 10
-#define MIN 1
+#define MIN 3
 #define MAX_X COLS-COLS
 #define MAX_Y  15
 #define OPPONENT 'O'
