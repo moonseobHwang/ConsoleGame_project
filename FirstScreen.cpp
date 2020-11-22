@@ -1,4 +1,5 @@
 #include "FirstScreen.h"
+#include "GameInfo.h"
 using namespace std;
 
 int output_start(int nX, int nY)
@@ -51,7 +52,19 @@ void print_start(int nX, int nY, char s)
     clear();
     refresh();
     }
-   
+}
+
+void game_start(int x, int y,int *diff)
+{
+    print_start(0,LINES-1,'s');
+    move(y/2,x/2);
+    printf(" 난이도를 입력후 엔터를 눌러주세요 1 ~ 5");
+    scanf("%d",diff);
+    *diff +=2;
+    constrain(diff,7);
+    move(0,0);
+    clear();
+    refresh();
 
 }
 

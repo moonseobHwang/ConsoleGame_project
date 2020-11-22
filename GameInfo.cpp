@@ -229,7 +229,7 @@ void gameinit()
     }
 }
 
-
+// 적 HP 체크 
 bool checkEnemyHp(EnemyInfo *Enemys,size_t size)
 {
     int EnemysHP = 0;
@@ -245,7 +245,7 @@ bool checkEnemyHp(EnemyInfo *Enemys,size_t size)
     }
     return false;
 }
-
+// 적HP 확인 
 void gameWin()
 {
     clear(); 
@@ -254,5 +254,6 @@ void gameWin()
     move(MAP_Y_MAX/2+1,MAP_X_MAX/2-6); 
     printw("Press Q for quit Game"); 
     while(getch()!='q'); 
-    endwin();
+    clear();
+    refresh();
 }
