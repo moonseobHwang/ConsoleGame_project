@@ -48,8 +48,10 @@ void print_start(int nX, int nY, char s)
             
                 //printf("%d", count);
         }
-    ch = getch();
+    clear();
+    refresh();
     }
+   
 
 }
 

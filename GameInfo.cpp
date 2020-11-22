@@ -169,11 +169,7 @@ void PlayerMissile(PlayerInfo *Player,EnemyInfo *Enemys, size_t size)
         if(Player->mis_on == true)
         {
             bool check_move = false;
-            
-            // && !(mvinch(Player->missile_pos[y],Player->missile_pos[x])=='W')
-            check_move |= (Player->missile_pos[y]-1==(Enemys+(size-1)-i)->pos[0][y] && Player->missile_pos[x]-1==(Enemys+(size-1)-i)->pos[0][x]);
             check_move |= (Player->missile_pos[y]-1==(Enemys+(size-1)-i)->pos[0][y] && Player->missile_pos[x]==(Enemys+(size-1)-i)->pos[0][x]);
-            check_move |= (Player->missile_pos[y]-1==(Enemys+(size-1)-i)->pos[0][y] && Player->missile_pos[x]+1==(Enemys+(size-1)-i)->pos[0][x]);
             if(check_move)
             {
                 Player->mis_on = false;
@@ -227,12 +223,9 @@ void gameinit()
     nodelay(stdscr,1);
     keypad(stdscr, TRUE);
     timeout(30); //fps 를 30으로 한정 
-    // for (int i=0;i==MAP_X_MAX;i++)
-    // {
-    //     for(int j=0;j==MAP_Y_MAX,j++)
-    //     {
-
-    //     }
-    // }
+    for (int i=0;i==MAP_X_MAX;i++)
+    {
+        
+    }
 }
 

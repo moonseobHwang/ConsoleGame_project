@@ -1,7 +1,6 @@
 #include "FirstScreen.h"
 #include "GameInfo.h"
 
-
 using namespace std;
 
 int main()
@@ -9,25 +8,27 @@ int main()
     // init curses option
     WINDOW *w;
     w=initscr();
-    gameinit();
-    //'start main
-    
+
     int max_y = LINES-1, max_x =COLS-COLS; // LINES = 가로행 갯수. COLS = 세로열 갯수 둘다 자동으로 할당됨
     int command = 'y';
     int diff = 5;
-    // init finished
+    gameinit();
+    //'start main
 
-    struct EnemyInfo Enemys[7];  
-    struct PlayerInfo Player;
-    size_t size = sizeof(Enemys)/sizeof(EnemyInfo);
-    EnemyInit(Enemys,size);
-    
     // game start
     print_start(0,max_y,'s');
-    clear();
-    printf(" 난이도를 입력해주세요 ");
+;
+    move(MAP_Y_MAX/2,MAP_X_MAX/2);
+    printf(" 난이도를 입력해주세요 1 ~ 5");
     scanf("%d",&diff);
     constrain(&diff,7);
+    move(0,0);
+   
+    // init finished
+    struct PlayerInfo Player;    
+    struct EnemyInfo Enemys[diff];       
+    size_t size = sizeof(Enemys)/sizeof(EnemyInfo);
+    EnemyInit(Enemys,size);
 
     // game Play
     int count = 0;
@@ -35,7 +36,7 @@ int main()
     {        
         timeout(200);
         // 플레이어 체력 표기줄로 이동 및 표기
-        move(Player.position[y]+3,2);
+        move(MAP_Y_MAX+3,2);
         printw("HP : %d",Player.HP);  
         // 플레이어 키보드 입력 확인
         command = getch();
