@@ -26,7 +26,7 @@ void EnemyMissiles(EnemyInfo *Enemys,size_t size, int move)
                 mvaddch(MAP_Y_MAX-1,(Enemys+i)->missile_pos[0],E_TRACE);
             else 
                 mvaddch(MAP_Y_MAX-1,(Enemys+i)->missile_pos[0]-1,E_TRACE);
-            (Enemys+i)->missile_pos[0] = 0;
+            (Enemys+i)->missile_pos[0] = -1;
             (Enemys+i)->missile_pos[1] = 0;           
         }
         else 

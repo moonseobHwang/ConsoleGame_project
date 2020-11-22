@@ -43,7 +43,7 @@ int main()
 
         if(count > 2){
             EnemyMissiles(Enemys,size,1);  
-            EnemyMove(Enemys,size,1);     
+            EnemyMove(Enemys,size,3);     
             count = 0;
         }  
         count++;

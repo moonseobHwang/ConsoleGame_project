@@ -15,7 +15,7 @@
 #define MAX_Y  15
 #define OPPONENT 'O'
 #define PLAYER '*'
-#define WALL 'W'
+#define WALL {'_','|'}
 #define E_TRACE ' '
 
 
