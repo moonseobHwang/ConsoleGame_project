@@ -67,5 +67,21 @@ void game_start(int *diff)
     clear();
     refresh();
 
+    move(0,0);
+    printw("____________________________");
+    move(MAP_Y_MAX+2,MAP_X_MAX/2-2);
+    printw("Command");
+    move(MAP_Y_MAX+1,1);
+    printw("____________________________");
+    move(MAP_Y_MAX+5,1);
+    printw("____________________________");
+    for(int i=0;i <= 14; ++i)
+    {
+        move(i,MAP_X_MAX+2);
+        printw("|");
+        move(i,1);
+        printw("|"); 
+    }
+
 }
 

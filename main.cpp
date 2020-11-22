@@ -24,6 +24,7 @@ int main()
         size_t size = sizeof(Enemys)/sizeof(EnemyInfo);
         EnemyInit(Enemys,size);
         // init finished
+      
 
         // game Play
         int count = 0;
