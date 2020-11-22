@@ -157,7 +157,7 @@ void command_move(int command,PlayerInfo *Player)
 void PlayerMissile(PlayerInfo *Player,EnemyInfo *Enemys, size_t size)
 {
     static int i = 0;
-    mvaddstr(MAP_Y_MAX+1,MAP_X_MAX+1,(std::to_string(i)).c_str());
+    //mvaddstr(MAP_Y_MAX+1,MAP_X_MAX+1,(std::to_string(i)).c_str());
     if(Player->mis_on == true && Player->missile_pos[y]>(Enemys+(size-1))->pos[0][y]+1)
     {
         mvaddch(Player->missile_pos[y],Player->missile_pos[x],E_TRACE);

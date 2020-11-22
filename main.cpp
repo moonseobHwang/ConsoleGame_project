@@ -1,4 +1,6 @@
+#include "FirstScreen.h"
 #include "GameInfo.h"
+
 
 using namespace std;
 
@@ -12,16 +14,20 @@ int main()
     
     int max_y = LINES-1, max_x =COLS-COLS; // LINES = 가로행 갯수. COLS = 세로열 갯수 둘다 자동으로 할당됨
     int command = 'y';
-    int move_x=0, move_y=0;
-    printw("%d, %d",LINES,COLS);
+    int diff = 5;
     // init finished
 
-    struct EnemyInfo Enemys[5];  
+    struct EnemyInfo Enemys[7];  
     struct PlayerInfo Player;
     size_t size = sizeof(Enemys)/sizeof(EnemyInfo);
     EnemyInit(Enemys,size);
     
     // game start
+    print_start(0,max_y,'s');
+    clear();
+    printf(" 난이도를 입력해주세요 ");
+    scanf("%d",&diff);
+    constrain(&diff,7);
 
     // game Play
     int count = 0;

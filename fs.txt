@@ -1,0 +1,14 @@
+// int main()
+// {
+//     WINDOW *w;
+//     w = initscr();
+//     using namespace std; // start main
+//     timeout(1000);
+//     curs_set(0);
+//     int max_y = LINES - 1, max_x = COLS - 1, move_x = 0, move_y = 0; // define in curses.h
+//     print_start(0, max_y, 's');
+//     printw("PRESS 'S' TO START THE GAME");
+//     // print_start(0, max_y, 'E');
+//     endwin();
+//     return 0;
+// }

@@ -1,6 +1,7 @@
 #ifndef GAMEINFO_H
 #define GAMEINFO_H
 
+#pragma once
 #include <stdio.h>
 #include <vector>
 #include <cmath>
