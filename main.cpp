@@ -17,10 +17,10 @@ int main()
 
     // game start
     print_start(0,max_y,'s');
-;
     move(MAP_Y_MAX/2,MAP_X_MAX/2);
     printf(" 난이도를 입력해주세요 1 ~ 5");
     scanf("%d",&diff);
+    diff +=2;
     constrain(&diff,7);
     move(0,0);
    
