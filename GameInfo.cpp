@@ -64,25 +64,26 @@ void EnemyInit(EnemyInfo *Enemys,size_t size)
 
 // 적 움직임 자동 관리
 void EnemyMove(EnemyInfo *Enemys, size_t size, int move)
-{
-    for (int i =0;i<size;i++)
+{    
+    for (int i =0;i<size;i++)   // 적 갯수만큼 for문 실행하는 코드
     {
-        move = rand()%(move)+1;
+        move = rand()%(move)+1; // 2를 넣었다면 2만큼 만 움직일 수 있음
         if ((Enemys+i)->HP >0)
         {
-            if (!(Enemys+i)->move_sign)
+            if (!(Enemys+i)->move_sign) // 적 아이콘 왼쪽 움직임
             {
-                
+                // 적 위치 이동 포인트 계산
                 (Enemys+i)->pos[0][0] = (Enemys+i)->pos[0][0]-move;
+                // 적 이동 최대,최소값 제한 
                 constrain(&((Enemys+i)->pos[0][0]),MAP_X_MAX);
+                // 적 아이콘 위치 이동 
                 mvaddch((Enemys+i)->pos[1][1], (Enemys+i)->pos[1][0],E_TRACE); 
                 mvaddch((Enemys+i)->pos[0][1], (Enemys+i)->pos[0][0] ,(Enemys+i)->fig );
-                
-
+                // 최소값보다 작은 위치로 이동할 경우 반대방향으로 이동 
                 if((Enemys+i)->pos[0][0] - move < 1)
                     (Enemys+i)->move_sign = true;
             }           
-            else if( (Enemys+i)->move_sign)
+            else if( (Enemys+i)->move_sign) // 적 아이콘이 오른쪽으로 움직임
             {
                 
                 (Enemys+i)->pos[0][0] = (Enemys+i)->pos[0][0]+move;
@@ -93,6 +94,7 @@ void EnemyMove(EnemyInfo *Enemys, size_t size, int move)
                 if((Enemys+i)->pos[0][0] == MAP_X_MAX)
                     (Enemys+i)->move_sign = false;
             }
+            // 현재 위치의 x,y 좌표를 기존 위치 좌표로 업데이트 
             (Enemys+i)->pos[1][0] = (Enemys+i)->pos[0][0];
             (Enemys+i)->pos[1][1] = (Enemys+i)->pos[0][1];
         }

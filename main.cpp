@@ -40,7 +40,7 @@ int main()
         if(Player.HP <=0) {gameSet(); break;};                      
         PlayerMissile(&Player,Enemys,size);  
         command_move(command,&Player);
-
+        // 
         if(count > 2){
             EnemyMissiles(Enemys,size,1);  
             EnemyMove(Enemys,size,3);     
