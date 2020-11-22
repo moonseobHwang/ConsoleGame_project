@@ -30,8 +30,11 @@ int main()
     size_t size = sizeof(Enemys)/sizeof(EnemyInfo);
     EnemyInit(Enemys,size);
 <<<<<<< HEAD
+<<<<<<< HEAD
    
     // game start
+=======
+>>>>>>> d30338d1e9c82c5b631be711f7384262caf8cdc8
 =======
 >>>>>>> d30338d1e9c82c5b631be711f7384262caf8cdc8
 
@@ -52,6 +55,10 @@ int main()
         if(checkEnemyHp(Enemys,size)) {gameWin(); break;};                   
         PlayerMissile(&Player,Enemys,size);  
         command_move(command,&Player);
+<<<<<<< HEAD
+=======
+        // 
+>>>>>>> d30338d1e9c82c5b631be711f7384262caf8cdc8
         if(count > 2){
             EnemyMissiles(Enemys,size,1);  
             EnemyMove(Enemys,size,3);     
