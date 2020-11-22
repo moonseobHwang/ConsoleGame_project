@@ -74,4 +74,5 @@ void gameSet();
 void gameWin();
 void gameinit();
 bool checkEnemyHp(EnemyInfo *Enemys,size_t size);
+void gameWin();
 #endif

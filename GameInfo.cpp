@@ -245,3 +245,14 @@ bool checkEnemyHp(EnemyInfo *Enemys,size_t size)
     }
     return false;
 }
+
+void gameWin()
+{
+    clear(); 
+    move(MAP_Y_MAX/2,MAP_X_MAX/2); 
+    printw("GAME Win!!"); 
+    move(MAP_Y_MAX/2+1,MAP_X_MAX/2-6); 
+    printw("Press Q for quit Game"); 
+    while(getch()!='q'); 
+    endwin();
+}
