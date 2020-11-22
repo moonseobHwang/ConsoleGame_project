@@ -37,20 +37,17 @@ int main()
         //화면상에 나와있는 표기들로 부터 데미지 계산
         calc_damage(&Player,Enemys,size);     
         //만약 체력이 0 이라면 게임을 종료    
-        if(Player.HP <=0) {gameSet(); break;};
-         
-        //                      
+        if(Player.HP <=0) {gameSet(); break;};                      
         PlayerMissile(&Player,Enemys,size);  
+        command_move(command,&Player);
+
         if(count > 2){
             EnemyMissiles(Enemys,size,1);  
             EnemyMove(Enemys,size,1);     
             count = 0;
-        }    
-               
-        command_move(command,&Player);
+        }  
         count++;
         refresh();
-     
     }
 
     //game end 
