@@ -26,9 +26,9 @@ int main()
     // game Play
     int count = 0;
     while(command != 'q' && command !='Q')
-    {
-        
+    {        
         timeout(200);
+        // 
         move(Player.position[y]+3,2);
         printw("HP : %d",Player.HP);    
         command = getch();

@@ -219,5 +219,12 @@ void gameinit()
     nodelay(stdscr,1);
     keypad(stdscr, TRUE);
     timeout(30); //fps 를 30으로 한정 
+    for (int i=0;i==MAP_X_MAX;i++)
+    {
+        for(int j=0;j==MAP_Y_MAX,j++)
+        {
+            
+        }
+    }
 }
 
