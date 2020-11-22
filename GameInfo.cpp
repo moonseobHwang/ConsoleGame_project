@@ -229,3 +229,19 @@ void gameinit()
     }
 }
 
+
+bool checkEnemyHp(EnemyInfo *Enemys,size_t size)
+{
+    int EnemysHP = 0;
+    for(int i=0; i<size; i++)
+    {
+        if((Enemys+i)->HP == 0){
+            EnemysHP += 1;
+        }
+    }
+    if(EnemysHP >= size)
+    {
+        return true;
+    }
+    return false;
+}

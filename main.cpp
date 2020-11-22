@@ -29,6 +29,14 @@ int main()
     struct EnemyInfo Enemys[diff];       
     size_t size = sizeof(Enemys)/sizeof(EnemyInfo);
     EnemyInit(Enemys,size);
+<<<<<<< HEAD
+<<<<<<< HEAD
+   
+    // game start
+=======
+>>>>>>> d30338d1e9c82c5b631be711f7384262caf8cdc8
+=======
+>>>>>>> d30338d1e9c82c5b631be711f7384262caf8cdc8
 
     // game Play
     int count = 0;
@@ -40,14 +48,17 @@ int main()
         printw("HP : %d",Player.HP);  
         // 플레이어 키보드 입력 확인
         command = getch();
-
         //화면상에 나와있는 표기들로 부터 데미지 계산
         calc_damage(&Player,Enemys,size);     
-        //만약 체력이 0 이라면 게임을 종료    
-        if(Player.HP <=0) {gameSet(); break;};                      
+        //만약 체력이 0 이라면 게임을 종료
+        if(Player.HP <=0) {gameSet(); break;};     
+        if(checkEnemyHp(Enemys,size)) {gameWin(); break;};                   
         PlayerMissile(&Player,Enemys,size);  
         command_move(command,&Player);
+<<<<<<< HEAD
+=======
         // 
+>>>>>>> d30338d1e9c82c5b631be711f7384262caf8cdc8
         if(count > 2){
             EnemyMissiles(Enemys,size,1);  
             EnemyMove(Enemys,size,3);     

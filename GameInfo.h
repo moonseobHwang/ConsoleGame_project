@@ -9,6 +9,7 @@
 #include <string>
 #include <curses.h>
 
+
 #define MAP_X_MAX 25
 #define MAP_Y_MAX 10
 #define MIN 1
@@ -32,8 +33,8 @@ struct EnemyInfo
     int missile_pos[2] = {0,0};
     bool move_sign = false;
     
+    
 };    
-
 
 struct PlayerInfo
 {
@@ -67,8 +68,10 @@ void EnemyInit(EnemyInfo *Enemys,size_t size);
 void EnemyMove(EnemyInfo *Enemys, size_t size, int move);
 void calc_damage(PlayerInfo *Player,EnemyInfo *Enemys,size_t size);
 void command_move(int command,PlayerInfo *Player);
-void PlayerMissile(PlayerInfo *Player,EnemyInfo *Enemys, size_t size);
+void PlayerMissile(PlayerInfo *Player,EnemyInfo *Enemys,size_t size);
+bool checkEnemyHp(EnemyInfo *Enemys,size_t size);
 void gameSet();
+void gameWin();
 void gameinit();
-
+bool checkEnemyHp(EnemyInfo *Enemys,size_t size);
 #endif
