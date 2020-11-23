@@ -88,4 +88,4 @@
 
 ## 구동영상 
 
-[![Video Label](https://youtu.be/yt8N-5jgttY)
+[구동영상](https://youtu.be/yt8N-5jgttY)
