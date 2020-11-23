@@ -79,3 +79,13 @@
 <img src ='22222.png'>  
 <br><br><br>
 
+
+## 코드 구조 
+
+<br><br>
+<img src = 'game blockdiagram.png'>
+
+
+## 구동영상 
+
+[![Video Label](https://www.youtube.com/watch?v=yt8N-5jgttY)
