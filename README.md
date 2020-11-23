@@ -88,6 +88,5 @@
 
 ## 구동영상 
 
-//[구동영상](https://youtu.be/yt8N-5jgttY)
 {% include video.html id="https://youtu.be/yt8N-5jgttY" %}  
 
